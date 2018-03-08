@@ -17,7 +17,7 @@
                      result = "s"
                      placeholder="Please enter a zip code"
                      v-on:keyup.enter="searchZipcode"
-                     v-model.trim="zipcodeMessage"
+                     v-model="zipcodeMessage"
                      v-bind:style="{ height: searchHeight, width: searchWidth, border: '2px lightgrey solid'}">
             </li>
           </v-flex>
@@ -29,7 +29,7 @@
                      result = "s"
                      placeholder="Please enter an address"
                      v-on:keyup.enter="searchZipcode"
-                     v-model.trim="addressMessage"
+                     v-model="addressMessage"
                      v-bind:style="{ height: searchHeight, width: searchWidth, border: '2px lightgrey solid'}">
             </li>
           </v-flex>
@@ -41,7 +41,7 @@
                      result = "s"
                      placeholder="Please enter a block id"
                      v-on:keyup.enter="searchZipcode"
-                     v-model.trim="blockMessage"
+                     v-model="blockMessage"
                      v-bind:style="{ height: searchHeight, width: searchWidth, border: '2px lightgrey solid'}">
             </li>
           </v-flex>
@@ -55,10 +55,10 @@
           </v-flex>
         </v-layout>
 
-            <v-layout column align-center xs>
+            <v-layout column align-center>
               <div class="hello" v-bind:style="{ backgroundColor: '#D4E8F9', height: 350 + 'px', width: 700 + 'px', overflow: 'auto' }">
               <div v-if="this.addressMessage !== ''">
-                <v-flex>
+                <v-flex text-xs-center md12>
                   <p> Result for address searching </p>
                 </v-flex>
                 <v-flex>
@@ -68,19 +68,19 @@
                 </v-flex>
               </div>
               <div v-else-if="this.zipcodeMessage !== ''">
-                <v-flex>
+                <v-flex text-xs-center md12>
                 <p> Result for zipcode searching </p>
                 </v-flex>
                 <v-flex>
                   <pre>
-                <li v-for="(item, key) in searchResult">
+                <li v-for="(item, key) in singleFamily">
                   {{key}} {{ item }}
                 </li>
                   </pre>
                 </v-flex>
               </div>
               <div v-else-if="this.blockMessage !== ''">
-                <v-flex>
+                <v-flex text-xs-center md12>
                   <p> Result for block searching </p>
                 </v-flex>
                 <v-flex>
