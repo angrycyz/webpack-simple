@@ -56,41 +56,76 @@
         </v-layout>
 
             <v-layout column align-center>
-              <div class="hello" v-bind:style="{ backgroundColor: '#D4E8F9', height: 350 + 'px', width: 700 + 'px', overflow: 'auto' }">
+              <div class="hello" v-bind:style="{ backgroundColor: veryLightBlue, height: 350 + 'px', width: 700 + 'px', overflow: 'auto' }">
               <div v-if="this.addressMessage !== ''">
                 <v-flex text-xs-center md12>
                   <p> Result for address searching </p>
                 </v-flex>
                 <v-flex>
-                  <li v-for="(item, key) in searchResult">
-                    {{key}} {{ item }}
+                  <v-btn depressed small>Property</v-btn>
+                </v-flex>
+                <v-flex>
+                  <li v-for="(item, key) in propertyInfo">
+                    {{key}} : {{ item }}
+                  </li>
+                </v-flex>
+                <v-flex>
+                  <v-btn depressed small>Assessment</v-btn>
+                </v-flex>
+                <v-flex>
+                  <li v-for="(item, key) in assessmentInfo">
+                    {{key}} : {{ item }}
                   </li>
                 </v-flex>
               </div>
+
               <div v-else-if="this.zipcodeMessage !== ''">
                 <v-flex text-xs-center md12>
                 <p> Result for zipcode searching </p>
                 </v-flex>
                 <v-flex>
-                  <pre>
+                  <v-btn depressed small>Single Family</v-btn>
+                </v-flex>
+                <v-flex>
                 <li v-for="(item, key) in singleFamily">
-                  {{key}} {{ item }}
+                  {{key}} : {{ item }}
                 </li>
-                  </pre>
+                </v-flex>
+                <v-flex>
+                  <v-btn depressed small>Multi Family</v-btn>
+                </v-flex>
+                <v-flex>
+                  <li v-for="(item, key) in multiFamily">
+                    {{key}} : {{ item }}
+                  </li>
+                </v-flex>
+                <v-flex>
+                  <v-btn depressed small>Historical</v-btn>
+                </v-flex>
+                <v-flex>
+                  <li v-for="(item, key) in hist">
+                    {{key}} : {{ item }}
+                  </li>
                 </v-flex>
               </div>
+
               <div v-else-if="this.blockMessage !== ''">
                 <v-flex text-xs-center md12>
                   <p> Result for block searching </p>
                 </v-flex>
                 <v-flex>
-                  <li v-for="(item, key) in searchResult">
-                    {{key}} {{ item }}
+                  <v-btn depressed small>Result</v-btn>
+                </v-flex>
+                <v-flex>
+                  <li v-for="(item, key) in blockResult">
+                    {{key}} : {{ item }}
                   </li>
                 </v-flex>
               </div>
               <div v-else>
+                <v-flex text-xs-center md12>
                 No Information is given
+                </v-flex>
               </div>
               </div>
             </v-layout>
@@ -135,10 +170,15 @@
         blockMessage: '',
         searchBottomColor: '#509088',
         listColor: '#5892f1',
+        veryLightBlue: '#D4E8F9',
+        lightBlue: '#9DCFF9',
         searchResult: [],
         singleFamily: [],
         multiFamily: [],
-        hist: []
+        hist: [],
+        propertyInfo: [],
+        assessmentInfo: [],
+        blockResult: []
       }
     },
     methods: {
@@ -171,9 +211,16 @@
             .then(response => {
               this.searchResult = response.data[0]
               console.log('results data', this.searchResult)
-              this.singleFamily = this.searchResult['zip/details']['result']['single_family']
-              this.multiFamily = this.searchResult['zip/details']['result']['multi_family']
-              this.hist = this.searchResult['zip/details']['result']['historical']
+              if (this.addressMessage !== '') {
+                this.propertyInfo = this.searchResult['property/details']['result']['property']
+                this.assessmentInfo = this.searchResult['property/details']['result']['assessment']
+              } else if (this.zipcodeMessage !== '') {
+                this.singleFamily = this.searchResult['zip/details']['result']['single_family']
+                this.multiFamily = this.searchResult['zip/details']['result']['multi_family']
+                this.hist = this.searchResult['zip/details']['result']['historical']
+              } else {
+                this.blockResult = this.searchResult['block/value_distribution']['result']
+              }
             })
               .catch(function(error) {
                 console.log(error)
